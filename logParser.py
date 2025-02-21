@@ -9,7 +9,6 @@ import csv
 import sys
 from collections import defaultdict
 from CONSTANTS import protocol_mapping
-from customExceptions import CustomError
 
 def process_flow_logs(flow_log_file, lookup):
     """
@@ -33,10 +32,10 @@ def process_flow_logs(flow_log_file, lookup):
             for line in file:
                 parts = line.split()
                 if len(parts) < 14:
-                    raise CustomError("Invalid row length in log file")  # Raise error for malformed data
+                    raise Exception("Invalid row length in log file")  # Raise error for malformed data
                 dst_port, protocol = parts[6], parts[7]
-                protocol = protocol_mapping.get(int(protocol), "")
-                key = (dst_port.lower(), protocol.lower())
+                protocol = protocol_mapping.get(int(protocol), "") # Mapped protocol number to protocol keyword
+                key = (dst_port, protocol.lower()) # Converted protocol to lower case as matches are case insensitive
                 if key in lookup:
                     tag_counts[lookup[key]] += 1
                 else:
@@ -71,9 +70,9 @@ def load_lookup_table(lookup_file):
             next(reader)  # skip the header for the csv file
             for row in reader:
                 if len(row) < 3:
-                    raise CustomError("Invalid row length in log file")  # Raise error for malformed data
+                    raise Exception("Invalid row length in log file")  # Raise error for malformed data
                 dstport, protocol, tag = row
-                lookup[(dstport, protocol.lower())] = tag  # Converted to lower case as matches are case insensitive
+                lookup[(dstport, protocol.lower())] = tag  # Converted protocol to lower case as matches are case insensitive
     except FileNotFoundError:
         print(f"Error: Lookup file {lookup_file} not found.")
         sys.exit(1)
