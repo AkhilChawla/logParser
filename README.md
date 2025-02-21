@@ -53,9 +53,9 @@ python logParser.py <flow_log_file> <lookup_file> <output_file>
 
 python logParser.py flow_logs.txt lookup_table.csv output_results.txt
 
-## Test Cases
+## Tests:
 
 The script has been tested with:
 - **Valid Flow Logs & Lookup Table**: The expected tag and port-protocol counts are correctly generated.
-- **Malformed Entries**: The script **raises a custom error** when encountering invalid lines instead of ignoring them.
+- **Malformed Entries**: The script **raises an error** when encountering invalid lines instead of ignoring them.
 - **Case Insensitivity**: Protocol names (`tcp`, `UDP`, etc.) are correctly matched in a case-insensitive manner.
